@@ -9,13 +9,18 @@ import { supabase } from "../api";
 import TelorKampung from "../static/telor-kampung.jpg";
 import TelorNegeri from "../static/telor-negeri.jpg";
 
+const initialState = { jumlah_telor: "" };
 const ListTelor = (props) => {
   console.log("ListTelor", props);
+  const [valueForm, setValueForm] = useState(initialState);
+  function onChange(e) {
+    setValueForm(() => ({ ...post, [e.target.name]: e.target.value }))
+  }
   return (
     <div className="p-2 mb-5 border border-gray-300 rounded">
       <div className="grid grid-flow-col grid-rows-3 gap-4">
         <div className="row-span-3">
-          <div className="w-48 h-48">
+          <div className="w-15 h-15 md:w-48 md:h-48">
             <Image src={TelorKampung} alt="telor kampung" />
           </div>
         </div>
@@ -25,27 +30,27 @@ const ListTelor = (props) => {
         </div>
         <div className="col-span-2 row-span-2">
           <div className="mb-5">Harga: Rp {props.harga},-</div>
-          <div className="flex justify-between">
+          <div className="md:flex md:justify-between">
             <div className="flex">
-              <HiOutlineMinusCircle
+              {/* <HiOutlineMinusCircle
                 onClick={() => setCountTelorKampung(telorKampung - 1)}
                 className="rounded-full cursor-pointer h-7 w-7 hover:bg-gray-400"
-              />
+              /> */}
+              <div>Jumlah: </div>
               <input
                 className="w-20 text-lg text-center border-b border-gray-300"
                 type="text"
-                // value={telorKampung}
-                onChange={() => {
-                  console.log("1");
-                }}
+                value={valueForm.jumlah_telor}
+                onChange={onChange}
               />
+              <div>kg</div>
               {/* {telorKampung} kg */}
-              <HiOutlinePlusCircle
+              {/* <HiOutlinePlusCircle
                 className="rounded-full cursor-pointer h-7 w-7 hover:bg-gray-400"
                 onClick={() => setCountTelorKampung(telorKampung + 1)}
-              />
+              /> */}
             </div>
-            <div>
+            <div className="mt-3 text-center md:mt-0 md:text-left">
               <button
                 // onClick={handleCheckout}
                 className=" py-2 px-4 rounded-xl text-white bg-green-tk hover:bg-green-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50 ..."
@@ -107,11 +112,13 @@ function Content() {
   return (
     <div className="flex-grow py-5 md:px-96">
       <div className="p-5 bg-white shadow-xl ">
-        {
-          telors.map(telor => (
-            <ListTelor key={telor.id} jenis={telor.jenis_telor} harga={telor.harga_telor} />
-          ))
-        }
+        {telors.map((telor) => (
+          <ListTelor
+            key={telor.id}
+            jenis={telor.jenis_telor}
+            harga={telor.harga_telor}
+          />
+        ))}
       </div>
     </div>
   );
