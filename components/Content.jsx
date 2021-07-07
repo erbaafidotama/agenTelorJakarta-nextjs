@@ -13,9 +13,12 @@ const initialState = { jumlah_telor: "" };
 const ListTelor = (props) => {
   console.log("ListTelor", props);
   const [valueForm, setValueForm] = useState(initialState);
+  const { jumlah_telor } = valueForm;
   function onChange(e) {
-    setValueForm(() => ({ ...post, [e.target.name]: e.target.value }))
+    // setValueForm(() => ({ ...valueForm, [e.target.name]: e.target.value }));
+    setValueForm(() => ({ jumlah_telor: e.target.value }));
   }
+  console.log("valueForm", valueForm);
   return (
     <div className="p-2 mb-5 border border-gray-300 rounded">
       <div className="grid grid-flow-col grid-rows-3 gap-4">
