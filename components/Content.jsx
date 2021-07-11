@@ -1,24 +1,31 @@
-import { useState, useEffect, FunctionComponent } from "react";
-import { HiOutlinePlusCircle, HiOutlineMinusCircle } from "react-icons/hi";
+import { useState, useEffect } from "react";
 import { IoMdCart } from "react-icons/io";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { v4 as uuid } from "uuid";
 import { supabase } from "../api";
+import useStore from "../lib/store";
 
 import TelorKampung from "../static/telor-kampung.jpg";
-import TelorNegeri from "../static/telor-negeri.jpg";
 
-const initialState = { jumlah_telor: "" };
 const ListTelor = (props) => {
-  console.log("ListTelor", props);
-  const [valueForm, setValueForm] = useState(initialState);
-  const { jumlah_telor } = valueForm;
-  function onChange(e) {
-    // setValueForm(() => ({ ...valueForm, [e.target.name]: e.target.value }));
-    setValueForm(() => ({ jumlah_telor: e.target.value }));
-  }
-  console.log("valueForm", valueForm);
+  const router = useRouter();
+  const [telor, setTelor] = useState("");
+  const addTelors = useStore((state) => state.addTelor);
+  const telors = useStore((state) => state.telors);
+  console.log("telorstelors", telors);
+
+  const onChange = (e) => {
+    setTelor(e.target.value);
+  };
+
+  const addTelor = (e) => {
+    console.log("MASOK");
+    addTelors({ jumlah_telor: telor });
+    // clear();
+    // e.preventDefault();
+    router.push("/checkout");
+  };
   return (
     <div className="p-2 mb-5 border border-gray-300 rounded">
       <div className="grid grid-flow-col grid-rows-3 gap-4">
@@ -43,7 +50,7 @@ const ListTelor = (props) => {
               <input
                 className="w-20 text-lg text-center border-b border-gray-300"
                 type="text"
-                value={valueForm.jumlah_telor}
+                value={telor}
                 onChange={onChange}
               />
               <div>kg</div>
@@ -55,7 +62,7 @@ const ListTelor = (props) => {
             </div>
             <div className="mt-3 text-center md:mt-0 md:text-left">
               <button
-                // onClick={handleCheckout}
+                onClick={(e) => addTelor()}
                 className=" py-2 px-4 rounded-xl text-white bg-green-tk hover:bg-green-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50 ..."
               >
                 <div className="flex justify-between space-x-2">
@@ -72,8 +79,7 @@ const ListTelor = (props) => {
 };
 
 function Content() {
-  const [telorKampung, setCountTelorKampung] = useState("");
-  const [telors, setDataTelor] = useState([]);
+  const [dataTelors, setDataTelor] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const router = useRouter();
@@ -88,6 +94,7 @@ function Content() {
 
   async function fetchTelor() {
     const { data, error } = await supabase.from("tbl_telor").select();
+    console.log(data);
     setDataTelor(data);
     setLoading(false);
   }
@@ -97,7 +104,7 @@ function Content() {
     const user = supabase.auth.user();
     const id = uuid();
     // post.id = id;
-    const { data } = await supabase
+    const { dataTelors } = await supabase
       .from("tbl_telor")
       .insert([
         {
@@ -110,12 +117,12 @@ function Content() {
       .single();
   }
 
-  console.log("telors", telors);
+  console.log("dataTelors", dataTelors);
   if (loading) return <p className="text-2xl">Loading ...</p>;
   return (
     <div className="flex-grow py-5 md:px-96">
       <div className="p-5 bg-white shadow-xl ">
-        {telors.map((telor) => (
+        {dataTelors.map((telor) => (
           <ListTelor
             key={telor.id}
             jenis={telor.jenis_telor}

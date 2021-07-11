@@ -1,14 +1,27 @@
+import { useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import useStore from "../lib/store";
 
 import TelorKampung from "../static/telor-kampung.jpg";
 
 function ContentCheckout() {
-    const router = useRouter();
-    const handleCheckoutInvoice = (e) => {
-        e.preventDefault();
-        router.push("/invoice");
-      };
+  const telors = useStore((state) => state.telors);
+  useEffect(() => {
+    console.log("USEAFFE");
+    if (telors.length < 1) {
+      console.log("YY");
+      router.push("/");
+    }
+  }, []);
+
+  console.log("telor ajaa", telors);
+
+  const router = useRouter();
+  const handleCheckoutInvoice = (e) => {
+    e.preventDefault();
+    router.push("/invoice");
+  };
 
   return (
     <div className="flex-grow py-5 md:px-96">
@@ -71,7 +84,10 @@ function ContentCheckout() {
             </div>
 
             <div>
-              <button onClick={handleCheckoutInvoice} className=" py-2 px-4 rounded-xl text-white bg-green-tk hover:bg-green-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50 ...">
+              <button
+                onClick={handleCheckoutInvoice}
+                className=" py-2 px-4 rounded-xl text-white bg-green-tk hover:bg-green-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50 ..."
+              >
                 <div className="flex justify-between space-x-2">
                   <div>Checkout</div>
                 </div>
