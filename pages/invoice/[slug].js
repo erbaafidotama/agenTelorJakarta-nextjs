@@ -1,5 +1,5 @@
-const { default: Footer } = require("../components/Footer");
-import Invoice from "../components/Invoice";
+const { default: Footer } = require("../../components/Footer");
+import Invoice from "../../components/Invoice";
 
 function invoice() {
   return (

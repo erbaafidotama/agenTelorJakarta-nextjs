@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { IoMdCart } from "react-icons/io";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import { v4 as uuid } from "uuid";
 import { supabase } from "../api";
 import useStore from "../lib/store";
@@ -21,9 +22,36 @@ const ListTelor = (props) => {
 
   const addTelor = (e) => {
     console.log("MASOK");
-    addTelors({ jumlah_telor: telor });
+    let today = new Date();
+    const monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    const dd = String(today.getDate()).padStart(2, "0");
+    // const mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+    const month = monthNames[today.getMonth()];
+    const yyyy = today.getFullYear();
+
+    const todayFullDate = dd + "-" + month + "-" + yyyy;
+    console.log("todayFullDate", todayFullDate);
+    addTelors({
+      jumlah_telor: telor,
+      jenis_telor: props.jenis,
+      harga_telor: props.harga,
+      tanggal_beli: todayFullDate,
+    });
     // clear();
-    // e.preventDefault();
+    e.preventDefault();
     router.push("/checkout");
   };
   return (
@@ -62,7 +90,7 @@ const ListTelor = (props) => {
             </div>
             <div className="mt-3 text-center md:mt-0 md:text-left">
               <button
-                onClick={(e) => addTelor()}
+                onClick={addTelor}
                 className=" py-2 px-4 rounded-xl text-white bg-green-tk hover:bg-green-400 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50 ..."
               >
                 <div className="flex justify-between space-x-2">
@@ -79,7 +107,13 @@ const ListTelor = (props) => {
 };
 
 function Content() {
+  const resetTelors = useStore((state) => state.resetTelor);
+  const resetTransaksi = useStore((state) => state.resetTransaksi);
+  const resetListTransaksi = useStore((state) => state.resetListTransaksi);
+  const addListTransaksi = useStore((state) => state.addListTransaksi);
+  const listTransaksi = useStore((state) => state.listTransaksi);
   const [dataTelors, setDataTelor] = useState([]);
+  const [dataTransaksi, setDataTransaksi] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const router = useRouter();
@@ -87,9 +121,14 @@ function Content() {
     e.preventDefault();
     router.push("/checkout");
   };
+  console.log("listTransaksi", listTransaksi);
 
   useEffect(() => {
+    resetTelors({});
+    resetTransaksi({});
+    resetListTransaksi();
     fetchTelor();
+    fetchListTransaksi();
   }, []);
 
   async function fetchTelor() {
@@ -97,6 +136,11 @@ function Content() {
     console.log(data);
     setDataTelor(data);
     setLoading(false);
+  }
+
+  async function fetchListTransaksi() {
+    const { data } = await supabase.from("tbl_transaksi").select();
+    addListTransaksi(data);
   }
 
   async function createNewPost() {
@@ -127,6 +171,7 @@ function Content() {
             key={telor.id}
             jenis={telor.jenis_telor}
             harga={telor.harga_telor}
+            dataTransaksi={dataTransaksi}
           />
         ))}
       </div>
