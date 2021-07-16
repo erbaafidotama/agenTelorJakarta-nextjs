@@ -8,7 +8,7 @@ import TelorKampung from "../static/telor-kampung.jpg";
 import { supabase } from "../api";
 let dataFetch;
 
-function ContentCheckout({transaksi}) {
+function ContentCheckout({ transaksi }) {
   const router = useRouter();
   const [values, setValues] = useState({
     nama_pembeli: "",
@@ -21,31 +21,28 @@ function ContentCheckout({transaksi}) {
   const listTransaksi = useStore((state) => state.listTransaksi);
   let idLatsRecord;
   let today = new Date();
-    const monthNames = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-    const dd = String(today.getDate()).padStart(2, "0");
-    // const mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-    const month = monthNames[today.getMonth()];
-    const yyyy = today.getFullYear();
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const dd = String(today.getDate()).padStart(2, "0");
+  const mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+  const month = monthNames[today.getMonth()];
+  const yyyy = today.getFullYear();
 
-    const todayFullDate = dd + month + yyyy;
-
-  console.log("transaksi", listTransaksi);
+  const todayFullDate = dd + mm + yyyy;
 
   useEffect(() => {
-    console.log("useEffect", transaksi);
     // fethingListTransaksi();
     // const fetchDataTransaksi = async () => {
     //   const response = await supabase.from("tbl_transaksi").select("*");
@@ -65,11 +62,11 @@ function ContentCheckout({transaksi}) {
   //   const { dataFetching, error } = await supabase
   //     .from("tbl_transaksi")
   //     .select("*");
-  //   console.log("dataFetching", dataFetching);
+  //
   //   dataFetch = dataFetching;
   // }
 
-  // console.log("idLatsRecord", dataListTransaksi);
+  //
   idLatsRecord = listTransaksi[listTransaksi.length - 1].id;
 
   const handleNamaPembeliInputChange = (event) => {
@@ -114,7 +111,7 @@ function ContentCheckout({transaksi}) {
           alamat_pembeli: values.alamat_pembeli,
           transaksi_uuid: transaksi_uuid,
           tanggal_beli: telors.tanggal_beli,
-          invoice_id: todayFullDate + "-" +idLatsRecord,
+          invoice_id: todayFullDate + "-" + idLatsRecord,
         },
       ])
       .single();
@@ -123,7 +120,7 @@ function ContentCheckout({transaksi}) {
   }
 
   if (router.isFallback) {
-    return <div>Loading...</div>
+    return <div>Loading...</div>;
   }
   return (
     <div className="flex-grow py-5 md:px-96">
@@ -225,18 +222,20 @@ export default ContentCheckout;
 
 export async function getStaticPaths() {
   const { data, error } = await supabase.from("tbl_transaksi").select("*");
-  const paths = data.map(post => ({ params: { id: JSON.stringify(post.id) }}))
+  const paths = data.map((post) => ({
+    params: { id: JSON.stringify(post.id) },
+  }));
   return {
     paths,
-    fallback: true
-  }
+    fallback: true,
+  };
 }
 
-export async function getStaticProps ({ params }) {
+export async function getStaticProps({ params }) {
   const { data } = await supabase.from("tbl_transaksi").select("*");
   return {
     props: {
-      transaksi: data
-    }
-  }
+      transaksi: data,
+    },
+  };
 }

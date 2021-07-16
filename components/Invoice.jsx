@@ -24,10 +24,6 @@ function Invoice({ transaksi }) {
   const addTransaksi = useStore((state) => state.addTransaksi);
   const dbDataTransaksi = useStore((state) => state.transaksi);
 
-  console.log("slug", slug);
-  console.log("invoice props", transaksi);
-  console.log("dbDataTransaksi", dbDataTransaksi);
-
   let dataUseTransaksi;
   if (dataTransaksi) {
     dataUseTransaksi = dataTransaksi;
@@ -36,9 +32,7 @@ function Invoice({ transaksi }) {
   }
 
   useEffect(() => {
-    console.log("INIII", slug);
     if (slug !== undefined) {
-      console.log("21212");
       fetchTransaksi();
     }
   }, []);
@@ -50,7 +44,7 @@ function Invoice({ transaksi }) {
       .select()
       .filter("transaksi_uuid", "eq", uuid)
       .single();
-    console.log("fetchTransaksi", data);
+
     addTransaksi(data);
 
     setDataTransaksi(data);

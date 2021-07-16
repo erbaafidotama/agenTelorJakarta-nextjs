@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { IoMdCart } from "react-icons/io";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import { v4 as uuid } from "uuid";
 import { supabase } from "../api";
 import useStore from "../lib/store";
@@ -14,14 +13,12 @@ const ListTelor = (props) => {
   const [telor, setTelor] = useState("");
   const addTelors = useStore((state) => state.addTelor);
   const telors = useStore((state) => state.telors);
-  console.log("telorstelors", telors);
 
   const onChange = (e) => {
     setTelor(e.target.value);
   };
 
   const addTelor = (e) => {
-    console.log("MASOK");
     let today = new Date();
     const monthNames = [
       "January",
@@ -43,7 +40,7 @@ const ListTelor = (props) => {
     const yyyy = today.getFullYear();
 
     const todayFullDate = dd + "-" + month + "-" + yyyy;
-    console.log("todayFullDate", todayFullDate);
+
     addTelors({
       jumlah_telor: telor,
       jenis_telor: props.jenis,
@@ -121,7 +118,6 @@ function Content() {
     e.preventDefault();
     router.push("/checkout");
   };
-  console.log("listTransaksi", listTransaksi);
 
   useEffect(() => {
     resetTelors({});
@@ -133,7 +129,7 @@ function Content() {
 
   async function fetchTelor() {
     const { data, error } = await supabase.from("tbl_telor").select();
-    console.log(data);
+
     setDataTelor(data);
     setLoading(false);
   }
@@ -161,7 +157,6 @@ function Content() {
       .single();
   }
 
-  console.log("dataTelors", dataTelors);
   if (loading) return <p className="text-2xl">Loading ...</p>;
   return (
     <div className="flex-grow py-5 md:px-96">
