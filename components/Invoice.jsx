@@ -213,7 +213,7 @@ function Invoice({ transaksi }) {
                 </div>
               </button>
               <ReactWhatsapp
-                number="1-212-736-5000"
+                number="085777966614"
                 message={
                   "Hello, Saya sudah memesan tolor dengan Invoice ID: " +
                   dataTransaksi.invoice_id
