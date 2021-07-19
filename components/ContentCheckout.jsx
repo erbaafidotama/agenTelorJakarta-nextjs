@@ -67,7 +67,7 @@ function ContentCheckout({ transaksi }) {
   // }
 
   console.log("listTransaksi", listTransaksi);
-  idLatsRecord = listTransaksi[listTransaksi.length - 1].id
+  idLatsRecord = listTransaksi[listTransaksi.length - 1]?.id
     ? parseInt(listTransaksi[listTransaksi.length - 1].id) + 1
     : 1;
 
