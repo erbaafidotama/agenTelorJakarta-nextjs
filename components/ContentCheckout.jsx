@@ -66,8 +66,10 @@ function ContentCheckout({ transaksi }) {
   //   dataFetch = dataFetching;
   // }
 
-  //
-  idLatsRecord = listTransaksi[listTransaksi.length - 1].id;
+  console.log("listTransaksi", listTransaksi);
+  idLatsRecord = listTransaksi[listTransaksi.length - 1].id
+    ? parseInt(listTransaksi[listTransaksi.length - 1].id) + 1
+    : 1;
 
   const handleNamaPembeliInputChange = (event) => {
     event.persist();
